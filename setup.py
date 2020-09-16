@@ -17,8 +17,8 @@ README = open(os.path.join(here, 'README.md'), encoding='utf-8').read()
 VERSION = '0.0.7'
 
 install_requires = [
+    'airflow',
     'requests',
-    'mysql-connector-python-rf'
 ]
 
 

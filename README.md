@@ -17,19 +17,19 @@ A Jupyter extension to productionalize your notebooks by scheduling them to run 
 #### Pre Requisites
 
 **Configure Airflow**
-~~~
+```
 export AIRFLOW_HOME=<path to airflow_home>
-~~~
+```
 
 Run airflow in command line, a `airflow.cfg` file will be generated in airflow home. Here is a list of parameters which needs to be changed.
 
-~~~
+```
 dags_folder = <path to airflow home>/dags
 executor = LocalExecutor
 sql_alchemy_conn = mysql+mysqlconnector:://<user name>:<password>@<host>:<port>/airflow
 dags_are_paused_at_creation = False (recommended)
 load_examples = False (recommended)
-~~~
+```
 
 Create a `dags` and a `variables` folder in airflow home to store the dag files and their related vairable files.
 
@@ -42,30 +42,30 @@ Create a database `airflow` in mysql. This serves as the metadata db for airflow
 Here are a few preparations to make scheduler extension work. The Pre-req steps can be skipped with those are already configured.
 
 **Export Path Variables**
-~~~
+```
 export AIRFLOW_METADATA_CONNECTION_STRING='mysql+mysqlconnector://<user name>:<password>@<host>:<port>/airflow'
-~~~
+```
 
 **Start Airflow Scheduler, Webserver**
 
 In this tutorial, we are using airflow LocalExecutor, hence airflow worker is not required. But if you are using some other executors like CeleryExecutor, then the airflow worker should also be started. 
 
-~~~
+```
 airflow initdb
 airflow webserver
 airflow scheduler 
-~~~
+```
 
 By default, the log files will be generated in airflow_home, you can configure that as well. Refer to https://airflow.apache.org/howto/write-logs.html.
 
 #### Install Airflow Scheduler Extension
 
-~~~
-conda install -c webscal3r zextensions
+```
+pip install -i https://pypi.anaconda.org/zouth/simple zextensions
 jupyter nbextension install airflow_scheduler --user --py 
 jupyter nbextension enable airflow_scheduler --user --py
 jupyter serverextension enable airflow_scheduler --py --user 
-~~~
+```
 
 
 ### Schedule Notebook

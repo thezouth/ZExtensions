@@ -14,6 +14,10 @@ import sqlalchemy
 
 CONNECTION_STRING = os.getenv("AIRFLOW_METADATA_CONNECTION_STRING","")
 AIRFLOW_HOME = os.getenv("AIRFLOW_HOME","")
+if AIRFLOW_HOME == '':
+    AIRFLOW_HOME = f'{os.environ["HOME"]}/airflow'
+    os.environ['AIRFLOW_HOME'] = AIRFLOW_HOME
+
 NOTEBOOK_STARTUP_PATH = os.getcwd() + "/"
 DAG_TEMPLATE = os.path.dirname(os.path.abspath(__file__)) + "/template/dag_template.py"
 VAR_TEMPLATE = os.path.dirname(os.path.abspath(__file__)) + "/template/var_template.conf"
