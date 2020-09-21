@@ -11,6 +11,8 @@ import getpass
 import os
 import sqlalchemy
 
+ISO_8601_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+DATE_FORMAT = ISO_8601_FORMAT
 
 CONNECTION_STRING = settings.SQL_ALCHEMY_CONN
 AIRFLOW_HOME = os.getenv("AIRFLOW_HOME", "")
@@ -45,7 +47,7 @@ class SchedulerHandler(IPythonHandler):
 
     @staticmethod
     def get_delta(start, interval):
-        start = datetime.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+        start = datetime.datetime.strptime(start, DATE_FORMAT)
         itv = interval.split(" ")
         delta = datetime.timedelta(**dict([(itv[1], int(itv[0]))]))
         return start, delta
@@ -136,8 +138,8 @@ class SchedulerHandler(IPythonHandler):
         self.cf.set("config", "username", getpass.getuser())
         self.cf.set("config", "interval", interval)
         self.cf.set("config", "notebook_path", notebook_path)
-        self.cf.set("config", "start", str(start))
-        self.cf.set("config", "end", str(end))
+        self.cf.set("config", "start", start.strftime(DATE_FORMAT))
+        self.cf.set("config", "end", end.strftime(DATE_FORMAT))
         self.cf.set("config", "emails_failure", emails_failure)
         self.cf.set("config", "emails_success", emails_success)
         self.cf.write(open(var_path, "w"))
@@ -215,7 +217,7 @@ class EditDagHandler(SchedulerHandler):
         start += delta
         configuration = [
             dag_id,
-            start,
+            start.strftime(DATE_FORMAT),
             interval,
             emails_failure,
             emails_success,

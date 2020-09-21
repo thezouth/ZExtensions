@@ -13,10 +13,10 @@
     {% for dag in dag_list %}
     <tr>
       <td><a href='#' onclick="redirect();">{{ dag[0] }}</a></td>
-      <td>{{ dag[1] }}</td>
+      <td data-value='{{ dag[1] }}'>{{ dag[1] }}</td>
       <td>{{ dag[2] }}</td>
       <td>{{ dag[3] }}</td>
-      <td>{{ dag[4] }}</td>
+      <td data-value='{{ dag[4] }}'>{{ dag[4] }}</td>
       <td>
         <form id="{{ dag[0] }}del" action="{{ base_url }}scheduler/delete_dag?notebook_name={{ dag[0] }}" method="POST">
           <button type="submit" class="btn btn-primary">Remove</button>
@@ -62,4 +62,35 @@
   function redirect() {
     window.open("http://localhost:8080")
   }
+
+  function to_local_datetime(datetime) {
+    var mm = datetime.getMonth() + 1; // getMonth() is zero-based
+    var dd = datetime.getDate();
+    var MM = datetime.getMinutes();
+    var HH = datetime.getHours();
+
+    return [
+      datetime.getFullYear(),
+      (mm > 9 ? '' : '0') + mm,
+      (dd > 9 ? '' : '0') + dd
+    ].join('-')
+      + " "
+      + [
+        (HH > 9 ? '' : '0') + HH,
+        (MM > 9 ? '' : '0') + MM,
+      ].join(':')
+  }
+
+  function reformat_datetime() {
+    $('td[data-value]').each((idx, elem) => {
+      (elem.dataset.value != 'N/A')
+        ? elem.innerHTML = to_local_datetime(new Date(elem.dataset.value))
+        : ''
+    })
+  }
+
+  $(document).ready(function () {
+    reformat_datetime()
+  });
+
 </script>

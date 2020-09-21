@@ -139,7 +139,7 @@ define(["base/js/namespace", "base/js/dialog", "tree/js/notebooklist", "base/js/
                   "notebook_path": notebook_path,
                   "emails_failure": emails_failure,
                   "emails_success": emails_success,
-                  "start": start,
+                  "start": new Date(start).toISOString(),
                   "runs": num_of_run,
                   "interval": interval
                 },

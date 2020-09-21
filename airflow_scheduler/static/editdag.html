@@ -55,13 +55,33 @@
   </div>
 </form>
 <script type="text/javascript">
+  function to_local_date(datetime) {
+    var mm = datetime.getMonth() + 1; // getMonth() is zero-based
+    var dd = datetime.getDate();
 
-  var init_start = "{{ configuration[1] }}".split(" ");
+    return [
+      datetime.getFullYear(),
+      (mm > 9 ? '' : '0') + mm,
+      (dd > 9 ? '' : '0') + dd
+    ].join('-');
+  }
+
+  function to_local_time(datetime) {
+    var MM = datetime.getMinutes();
+    var HH = datetime.getHours();
+
+    return [
+      (HH > 9 ? '' : '0') + HH,
+      (MM > 9 ? '' : '0') + MM,
+    ].join(':');
+  }
+
+  var init_datetime = new Date("{{ configuration[1] }}")
   var init_interval = "{{ configuration[2] }}".split(" ");
   var init_email_failure = "{{ configuration[3] }}";
   var init_email_success = "{{ configuration[4] }}";
-  var init_start_on = init_start[0];
-  var init_start_at = init_start[1].substring(0, init_start[1].length - 3);
+  var init_start_on = to_local_date(init_datetime)
+  var init_start_at = to_local_time(init_datetime)
   var init_freq = init_interval[0];
   var init_unit = init_interval[1];
   var freq = $('#freq');
@@ -122,7 +142,7 @@
     var payload = {
       "_xsrf": _xsrf,
       "dag_id": '{{ configuration[0] }}',
-      "start": start,
+      "start": new Date(start).toISOString(),
       "runs": num_of_runs,
       "freq": freq.val(),
       "unit": unit.val(),

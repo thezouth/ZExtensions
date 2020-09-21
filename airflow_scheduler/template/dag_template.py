@@ -9,6 +9,8 @@ import nbformat
 import os
 import subprocess
 
+from airflow_scheduler.scheduler import DATE_FORMAT
+
 cf = configparser.ConfigParser()
 surfix = "_".join(os.path.splitext(os.path.basename(__file__))[0].split("_")[1:])
 var_path = os.environ["AIRFLOW_HOME"] + "/variables/var_" + surfix + ".conf"
@@ -17,8 +19,8 @@ dag_id = cf.get("config", "dag_id")
 username = cf.get("config", "username")
 interval = cf.get("config", "interval")
 notebook_path = cf.get("config", "notebook_path")
-start = datetime.strptime(cf.get("config", "start"), "%Y-%m-%d %H:%M:%S")
-end = datetime.strptime(cf.get("config", "end"), "%Y-%m-%d %H:%M:%S")
+start = datetime.strptime(cf.get("config", "start"), DATE_FORMAT)
+end = datetime.strptime(cf.get("config", "end"), DATE_FORMAT)
 emails_failure = cf.get("config", "emails_failure")
 emails_success = cf.get("config", "emails_success")
 email_on_failure = len(emails_failure) != 0
