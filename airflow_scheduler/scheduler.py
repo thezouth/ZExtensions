@@ -52,7 +52,7 @@ class SchedulerHandler(IPythonHandler):
     @provide_session
     def dag_info(dag_inst, session):
         interval = dag_inst.schedule_interval
-        notebook_name = dag_inst.dag_id.split('_')[1]
+        notebook_name = dag_inst.dag_id.split('_', 1)[1]
         task = dag_inst.get_task("notebook_task")
         start_date = task.start_date
         end_date = task.end_date
