@@ -12,7 +12,7 @@ import os
 import sqlalchemy
 
 
-CONNECTION_STRING = os.getenv("AIRFLOW_METADATA_CONNECTION_STRING","")
+CONNECTION_STRING = settings.SQL_ALCHEMY_CONN
 AIRFLOW_HOME = os.getenv("AIRFLOW_HOME","")
 if AIRFLOW_HOME == '':
     AIRFLOW_HOME = f'{os.environ["HOME"]}/airflow'
