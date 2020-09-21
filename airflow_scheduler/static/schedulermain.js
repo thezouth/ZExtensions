@@ -3,38 +3,38 @@ define(["jquery",
   "base/js/utils",
   "./scheduler"
 ], function ($, Jupyter, utils, scheduleoperation) {
-  function load_ipython_extension () {
+  function load_ipython_extension() {
     var scheduler_html = $("<button title=\"Schedule selected\" class=\"schedule-button btn btn-default btn-xs\">Schedule</button>");
     var scheduler_tab_html = $.parseHTML("<li><a href=\"#scheduledjobs\" class=\"scheduled_jobs\" data-toggle=\"tab\">Scheduled Jobs</a></li>");
     var scheduler_tab_content_html = $.parseHTML("         <div id=\"scheduledjobs\" class=\"tab-pane\">\n" +
-            "           <div id=\"schedule_toolbar\" class=\"row\" style=\"margin-top:10px; margin-bottom:10px\">\n" +
-            "            <div class=\"col-sm-8 no-padding\">\n" +
-            "              <span id=\"schedule_list_info\">Currently scheduled airflow jobs</span>\n" +
-            "            </div>\n" +
-            "            <div class=\"col-sm-4 no-padding tree-buttons\">\n" +
-            "              <span id=\"schedule_buttons\" class=\"pull-right\">\n" +
-            "              <button id=\"refresh_schedule_list\" title=\"Refresh schedule list\" class=\"btn btn-default btn-xs\"><i class=\"fa fa-refresh\"></i></button>\n" +
-            "              </span>\n" +
-            "            </div>\n" +
-            "           </div>\n" +
-            "           <div class=\"panel-group\" id=\"scheduled\" >\n" +
-            "            <div class=\"panel panel-default\">\n" +
-            "              <div class=\"panel-heading\">\n" +
-            "                <a data-toggle=\"collapse\" data-target=\"#collapseThree\" href=\"#\">\n" +
-            "                  Airflow Jobs:\n" +
-            "                </a>\n" +
-            "              </div>\n" +
-            "              <div id=\"collapseThree\" class=\"collapse in\">\n" +
-            "                <div class=\"panel-body\">\n" +
-            "                  <div id=\"schedule_list\">\n" +
-            "                    <div id=\"schedule_list_placeholder\" class=\"row list_placeholder\">\n" +
-            "                    </div>\n" +
-            "                  </div>\n" +
-            "                </div>\n" +
-            "              </div>\n" +
-            "            </div>\n" +
-            "          </div>\n" +
-            "        </div>");
+      "           <div id=\"schedule_toolbar\" class=\"row\" style=\"margin-top:10px; margin-bottom:10px\">\n" +
+      "            <div class=\"col-sm-8 no-padding\">\n" +
+      "              <span id=\"schedule_list_info\">Currently scheduled airflow jobs</span>\n" +
+      "            </div>\n" +
+      "            <div class=\"col-sm-4 no-padding tree-buttons\">\n" +
+      "              <span id=\"schedule_buttons\" class=\"pull-right\">\n" +
+      "              <button id=\"refresh_schedule_list\" title=\"Refresh schedule list\" class=\"btn btn-default btn-xs\"><i class=\"fa fa-refresh\"></i></button>\n" +
+      "              </span>\n" +
+      "            </div>\n" +
+      "           </div>\n" +
+      "           <div class=\"panel-group\" id=\"scheduled\" >\n" +
+      "            <div class=\"panel panel-default\">\n" +
+      "              <div class=\"panel-heading\">\n" +
+      "                <a data-toggle=\"collapse\" data-target=\"#collapseThree\" href=\"#\">\n" +
+      "                  Airflow Jobs:\n" +
+      "                </a>\n" +
+      "              </div>\n" +
+      "              <div id=\"collapseThree\" class=\"collapse in\">\n" +
+      "                <div class=\"panel-body\">\n" +
+      "                  <div id=\"schedule_list\">\n" +
+      "                    <div id=\"schedule_list_placeholder\" class=\"row list_placeholder\">\n" +
+      "                    </div>\n" +
+      "                  </div>\n" +
+      "                </div>\n" +
+      "              </div>\n" +
+      "            </div>\n" +
+      "          </div>\n" +
+      "        </div>");
 
     scheduler_html.insertAfter($("button[title|='Edit selected']"));
     $(".tab-content").append(scheduler_tab_content_html);
@@ -49,7 +49,7 @@ define(["jquery",
     });
 
     if (window.location.hash == "#scheduledjobs") {
-        $(".scheduled_jobs").click();
+      $(".scheduled_jobs").click();
     }
 
     var _selection_changed = Jupyter.notebook_list.__proto__._selection_changed;

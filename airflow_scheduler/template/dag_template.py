@@ -10,8 +10,8 @@ import os
 import subprocess
 
 cf = configparser.ConfigParser()
-surfix = "_".join(os.path.splitext(os.path.basename(__file__))[0].split('_')[1:])
-var_path = os.environ['AIRFLOW_HOME'] + '/variables/var_' + surfix + '.conf'
+surfix = "_".join(os.path.splitext(os.path.basename(__file__))[0].split("_")[1:])
+var_path = os.environ["AIRFLOW_HOME"] + "/variables/var_" + surfix + ".conf"
 cf.read(var_path)
 dag_id = cf.get("config", "dag_id")
 username = cf.get("config", "username")
@@ -28,13 +28,13 @@ schedule_interval = timedelta(**dict([(itv[1], int(itv[0]))]))
 
 
 default_args = {
-    'owner': username,
-    'depends_on_past': False,
-    'start_date': start,
-    'end_date': end,
-    'email': emails_failure.split(","),
-    'email_on_failure': email_on_failure,
-    'catchup': False,
+    "owner": username,
+    "depends_on_past": False,
+    "start_date": start,
+    "end_date": end,
+    "email": emails_failure.split(","),
+    "email_on_failure": email_on_failure,
+    "catchup": False,
 }
 
 
@@ -68,19 +68,19 @@ def nb_task(ds, **kwargs):
 
     ep = ExecutePreprocessor(timeout=21600)
     try:
-        out = ep.preprocess(nb, {'metadata': {'path': notebook_dir}})
+        out = ep.preprocess(nb, {"metadata": {"path": notebook_dir}})
     except CellExecutionError:
         msg = 'Error executing the notebook "%s".\n\n' % notebook_path
         msg += 'See notebook "%s" for the traceback.' % notebook_path
         print(msg)
         raise
     finally:
-        with open(notebook_path, mode='wt') as f:
+        with open(notebook_path, mode="wt") as f:
             nbformat.write(nb, f)
 
 
 python_operator = PythonOperator(
-    task_id='notebook_task',
+    task_id="notebook_task",
     provide_context=True,
     python_callable=nb_task,
     dag=dag,
@@ -90,11 +90,10 @@ python_operator = PythonOperator(
 
 if email_on_success:
     email_operator = EmailOperator(
-        task_id='email_task',
+        task_id="email_task",
         to=emails_success.split(","),
-        subject='{} completed successfully'.format(dag_id),
+        subject="{} completed successfully".format(dag_id),
         dag=dag,
-        html_content="<p>This job is successfully executed, to customize the email content, please edit dag_template.py</p>"
+        html_content="<p>This job is successfully executed, to customize the email content, please edit dag_template.py</p>",
     )
     email_operator.set_upstream(python_operator)
-

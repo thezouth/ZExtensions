@@ -110,7 +110,7 @@ define(["base/js/namespace", "base/js/dialog", "tree/js/notebooklist", "base/js/
             }
             var num_of_run = "None";
             if ($("#runs").val() !== "None") {
-                num_of_run = $("#runs").val().split(" ")[0];
+              num_of_run = $("#runs").val().split(" ")[0];
             }
             var start = start_date.val() + " " + start_time.val() + ":00";
             var interval = every_num.val() + " " + every_unit.val();
@@ -123,44 +123,44 @@ define(["base/js/namespace", "base/js/dialog", "tree/js/notebooklist", "base/js/
               alert("Cannot schedule in the past!");
               return false;
             }
-            function schedule () {
-                var spin = dialog.modal({
-                  title: "Scheduling...",
-                  body: $("<div style=\"text-align:center\"><i class=\"fa fa-spinner fa-spin\" style=\"font-size:100px\"></i></div>")
-                    .append($("<div style=\"text-align:center\">" +
-                                            "<strong>Your notebook will be scheduled in a few seconds." +
-                                            "\nNote: If you do not see your notebook in scheduled jobs, " +
-                                            "please wait and refresh because scheduler is working on picking up your job." +
-                                            "</strong></div>"))
-                                            });
-                var settings = {
-                  data: {
-                    "notebook_name": notebook_name,
-                    "notebook_path": notebook_path,
-                    "emails_failure": emails_failure,
-                    "emails_success": emails_success,
-                    "start": start,
-                    "runs": num_of_run,
-                    "interval": interval
-                  },
-                  method: "POST",
-                  success: function () {
-                    $(".scheduled_jobs").click().tab("show");
+            function schedule() {
+              var spin = dialog.modal({
+                title: "Scheduling...",
+                body: $("<div style=\"text-align:center\"><i class=\"fa fa-spinner fa-spin\" style=\"font-size:100px\"></i></div>")
+                  .append($("<div style=\"text-align:center\">" +
+                    "<strong>Your notebook will be scheduled in a few seconds." +
+                    "\nNote: If you do not see your notebook in scheduled jobs, " +
+                    "please wait and refresh because scheduler is working on picking up your job." +
+                    "</strong></div>"))
+              });
+              var settings = {
+                data: {
+                  "notebook_name": notebook_name,
+                  "notebook_path": notebook_path,
+                  "emails_failure": emails_failure,
+                  "emails_success": emails_success,
+                  "start": start,
+                  "runs": num_of_run,
+                  "interval": interval
+                },
+                method: "POST",
+                success: function () {
+                  $(".scheduled_jobs").click().tab("show");
                   spin.modal("hide");
-                  },
-                  error: function () {
-                    spin.modal("hide");
-                    dialog.modal({
-                      title: "Schedule Failed!",
-                      body: $("<div/>").text("Error: something wrong in scheduling, please check your notebook and try again!"),
-                      buttons: {
-                        OK: { class: "btn-primary" }
-                      }
-                    });
-                  }
-                };
-                var url = utils.url_path_join(that.base_url, "/scheduler/create_dag");
-                utils.ajax(url, settings);
+                },
+                error: function () {
+                  spin.modal("hide");
+                  dialog.modal({
+                    title: "Schedule Failed!",
+                    body: $("<div/>").text("Error: something wrong in scheduling, please check your notebook and try again!"),
+                    buttons: {
+                      OK: { class: "btn-primary" }
+                    }
+                  });
+                }
+              };
+              var url = utils.url_path_join(that.base_url, "/scheduler/create_dag");
+              utils.ajax(url, settings);
             }
             var url = utils.url_path_join(that.base_url, "/scheduler/check_dag");
             $.get(url + "?notebook_name=" + notebook_name, function (res) {
@@ -172,7 +172,8 @@ define(["base/js/namespace", "base/js/dialog", "tree/js/notebooklist", "base/js/
                     Cancel: {
                       click: function () {
 
-                      } },
+                      }
+                    },
                     Override: {
                       class: "btn-primary",
                       click: function () {
@@ -187,7 +188,8 @@ define(["base/js/namespace", "base/js/dialog", "tree/js/notebooklist", "base/js/
                         utils.ajax(url, settings).done(
                           function () { schedule(); }
                         );
-                      } }
+                      }
+                    }
                   }
                 });
               } else {
