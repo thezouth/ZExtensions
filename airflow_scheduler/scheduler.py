@@ -137,7 +137,7 @@ class SchedulerHandler(IPythonHandler):
         self.cf.set("config", "dag_id", dag_id)
         self.cf.set("config", "username", getpass.getuser())
         self.cf.set("config", "interval", interval)
-        self.cf.set("config", "notebook_path", notebook_path)
+        self.cf.set("config", "notebook_path", os.path.realpath(notebook_path))
         self.cf.set("config", "start", start.strftime(DATE_FORMAT))
         self.cf.set("config", "end", end.strftime(DATE_FORMAT))
         self.cf.set("config", "emails_failure", emails_failure)
