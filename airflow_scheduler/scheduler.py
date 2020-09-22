@@ -174,7 +174,15 @@ class GetDagHandler(SchedulerHandler):
     def get(self):
         dag_list = self.get_dag(getpass.getuser())
         base_url = self.get_argument("base_url")
-        self.render("daginfo.html", base_url=base_url, dag_list=dag_list)
+        airflow_web = os.environ.get(
+            "AIRFLOW_SCHEDULER_AIRFLOW_WEB_URL", "localhost:8080"
+        )
+        self.render(
+            "daginfo.html",
+            base_url=base_url,
+            dag_list=dag_list,
+            airflow_web=airflow_web,
+        )
 
 
 class DeleteDagHandler(SchedulerHandler):

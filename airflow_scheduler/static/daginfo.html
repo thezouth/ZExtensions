@@ -60,7 +60,7 @@
   {% end %}
 
   function redirect() {
-    window.open("http://localhost:8080")
+    window.open("{{ airflow_web }}")
   }
 
   function to_local_datetime(datetime) {

@@ -19,6 +19,7 @@ A Jupyter extension to productionalize your notebooks by scheduling them to run 
 **Configure Airflow**
 ```
 export AIRFLOW_HOME=<path to airflow_home>
+export AIRFLOW_SCHEDULER_AIRFLOW_WEB_URL='http://airflow:8080'
 ```
 
 Run airflow in command line, a `airflow.cfg` file will be generated in airflow home. Here is a list of parameters which needs to be changed.
@@ -132,7 +133,8 @@ scheduler --> QueueBroker
 - edit environment for jupyter notebook `/opt/tljh/config/jupyterhub_config.d/environment.py`
 ```
 c.Spawner.environment = {
-  'AIRFLOW_HOME': '/opt/bitnami/airflow'
+  'AIRFLOW_HOME': '/opt/bitnami/airflow',
+  'AIRFLOW_SCHEDULER_AIRFLOW_WEB_URL': 'http://172.16.14.18:8080'
 }
 ```
 
