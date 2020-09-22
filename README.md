@@ -41,10 +41,7 @@ Create a database `airflow` in mysql. This serves as the metadata db for airflow
 
 Here are a few preparations to make scheduler extension work. The Pre-req steps can be skipped with those are already configured.
 
-**Export Path Variables**
-```
-export AIRFLOW_METADATA_CONNECTION_STRING='mysql+mysqlconnector://<user name>:<password>@<host>:<port>/airflow'
-```
+#### Cluster Setup (see Appendix)
 
 **Start Airflow Scheduler, Webserver**
 
@@ -61,7 +58,7 @@ By default, the log files will be generated in airflow_home, you can configure t
 #### Install Airflow Scheduler Extension
 
 ```
-pip install -i https://pypi.anaconda.org/zouth/simple zextensions
+pip install --extra-index-url https://pypi.anaconda.org/zouth/simple zextensions
 jupyter nbextension install airflow_scheduler --user --py 
 jupyter nbextension enable airflow_scheduler --user --py
 jupyter serverextension enable airflow_scheduler --py --user 
@@ -97,4 +94,70 @@ To delete a job, go to the `Scheduled Jobs` tab, click on `Remove` button in `Ac
 
 
 
+# Appendix I: Cluster Setup
+Airflow in Cluster mode required additional setup.
+
+# Architecture
+
+```puml
+@startuml
+node webserver
+node scheduler
+node worker
+
+database database
+file dags
+
+component celery {
+  queue QueueBroker
+  database ResultBackend
+}
+
+webserver -[#green]-> database
+scheduler --> database
+worker -[#blue]-> database
+
+webserver -[#green]-> dags
+scheduler --> dags
+worker -[#blue]-> dags
+
+worker -[#blue]-> ResultBackend
+scheduler --> ResultBackend
+
+worker -[#blue]-> QueueBroker
+scheduler --> QueueBroker
+@enduml
+```
+
+- edit environment for jupyter notebook `/opt/tljh/config/jupyterhub_config.d/environment.py`
+```
+c.Spawner.environment = {
+  'AIRFLOW_HOME': '/opt/bitnami/airflow'
+}
+```
+
+- reload jupyterhub 
+```
+tljh-config reload
+tljh-config reload proxy
+```
+
+- create `dags`, `variables`, and `shared_notebooks` directory in `AIRFLOW_HOME`
+```
+set -u
+mkdir -p ${AIRFLOW_HOME}/{dags,variables,shared_notebooks}
+chown -R nobody: /opt/bitnami/airflow/shared_notebooks
+```
+- create symbolic link for shared_notebook
+```
+set -u
+ln -s ${AIRFLOW_HOME}/shared_notebooks
+```
+- mount sshfs
+```
+mkdir -p /root/docker/mnt/airflow
+sudo sshfs -o allow_other,default_permissions root@172.16.14.17:/opt/bitnami/airflow /root/docker/mnt/airflow
+
+mkdir -p /opt/bitnami/airflow/shared_notebooks
+sudo sshfs -o allow_other,default_permissions root@172.16.14.17:/opt/bitnami/airflow/shared_notebooks /opt/bitnami/airflow/shared_notebooks
 
