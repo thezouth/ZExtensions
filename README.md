@@ -59,9 +59,9 @@ By default, the log files will be generated in airflow_home, you can configure t
 #### Install Airflow Scheduler Extension
 
 ```
-pip install --extra-index-url https://pypi.anaconda.org/zouth/simple zextensions
-jupyter nbextension install airflow_scheduler --user --py 
-jupyter nbextension enable airflow_scheduler --user --py
+pip install --user --extra-index-url https://pypi.anaconda.org/zouth/simple zextensions
+jupyter nbextension install airflow_scheduler --py --user
+jupyter nbextension enable airflow_scheduler --py --user
 jupyter serverextension enable airflow_scheduler --py --user 
 ```
 
@@ -148,12 +148,17 @@ tljh-config reload proxy
 ```
 set -u
 mkdir -p ${AIRFLOW_HOME}/{dags,variables,shared_notebooks}
-chown -R nobody: /opt/bitnami/airflow/shared_notebooks
+chown -R nobody:root /opt/bitnami/airflow/shared_notebooks
+chmod -R g+rwxs /opt/bitnami/airflow/shared_notebooks
+setfacl -d -m group::rwx /opt/bitnami/airflow/shared_notebooks
+
 ```
 - create symbolic link for shared_notebook
 ```
-set -u
-ln -s ${AIRFLOW_HOME}/shared_notebooks
+# create notebook folder for specific user
+sudo mkdir /opt/bitnami/airflow/shared_notebooks/<username>
+sudo chown -R <username>:root /opt/bitnami/airflow/shared_notebooks/<username>
+ln -s /opt/bitnami/airflow/shared_notebooks/<username> ${HOME}/shared_notebooks
 ```
 - mount sshfs
 ```
