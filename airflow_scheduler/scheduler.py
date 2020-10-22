@@ -109,7 +109,7 @@ class SchedulerHandler(IPythonHandler):
                 "job",
                 "dag_run",
                 "task_fail",
-                "dag_stats",
+                "dag_tag",
             ]:
                 query = "delete from {} where dag_id='{}'".format(t, dag_id)
                 con.execute(query)
