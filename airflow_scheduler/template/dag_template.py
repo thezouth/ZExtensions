@@ -40,25 +40,10 @@ default_args = {
 }
 
 
-def is_sudoable(username):
-    cmd = ["sudo", "-E", "-H", "-u", username, "ls", "/sdf"]
-    try:
-        subprocess.check_call(cmd, stdout=subprocess.DEVNULL)
-    except subprocess.CalledProcessError:
-        return False
-    else:
-        return True
-
-
-def get_run_as_user(username):
-    return username if is_sudoable(username) else None
-
-
 dag = DAG(
     dag_id,
     default_args=default_args,
     schedule_interval=schedule_interval,
-    user_defined_macros={"get_run_as_user": get_run_as_user},
 )
 
 
@@ -87,7 +72,6 @@ python_operator = PythonOperator(
     python_callable=nb_task,
     dag=dag,
     op_kwargs={"notebook_path": notebook_path},
-    run_as_user="{{ get_run_as_user(username) }}",
 )
 
 if email_on_success:
